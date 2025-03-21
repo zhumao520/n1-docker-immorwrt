@@ -57,6 +57,7 @@ check_dependencies() {
             error "无法自动安装jq，请手动安装后重试"
             missing_tools+=("jq")
         fi
+
     fi
 
     if [ ${#missing_tools[@]} -gt 0 ]; then
@@ -492,8 +493,18 @@ setup_immortalwrt_container() {
             chmod +x imm.sh && 
             ./imm.sh || true
         "
-        
         # 等待iStore安装完成
+           sleep 5
+           
+        # 等待安装nikki插件
+        
+         docker exec immortalwrt sh -c "
+            wget -qO install.sh https://github.com/nikkinikki-org/OpenWrt-nikki/raw/refs/heads/main/install.sh && 
+            chmod +x install.sh && 
+            ./install.sh || true
+        "
+        
+        # 等待nikki安装完成
         sleep 5
         
         # 安装网络向导和首页
